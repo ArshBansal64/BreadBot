@@ -19,7 +19,7 @@ The data folder contains a sample jobs.csv file used to demonstrate the pipeline
 
 ## Keyword Storage
 The keywords folder contains:
-- keywords.csv: a cumulative master file updated across runs
+- keywords.csv: a cumulative master file updated across runs. This was used to generate visualizations (see below).
 - timestamped subfolders: each run stores its own jobs and keyword snapshot to preserve history and reproducibility
 
 ## Visualizations

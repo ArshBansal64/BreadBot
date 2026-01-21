@@ -28,7 +28,7 @@ The scripts/keywordVisualization.R script generates:
 - A word cloud showing relative keyword frequency
 
 Example outputs are included in the visualizations folder. The R script is meant to be run manually after a sufficient sum of data has been collected and aggregated.
-<img width="2048" height="1536" alt="Bar Chart" src="https://github.com/user-attachments/assets/8327fef5-9cee-497e-9c7e-d6e88ff9ef0a" />
+<img width="2400" height="1800" alt="image" src="https://github.com/user-attachments/assets/024af273-7275-4de5-a98f-0dc544168fe4" />
 
 
 ## Reproducibility

@@ -3,7 +3,7 @@
 This project analyzes keywords found in software engineering and data science job descriptions and visualizes trends in employer demand.
 
 ## Overview
-Breadbot is a lightweight analysis pipeline that processes job description text, extracts technical keywords using a language model, aggregates frequencies, and produces visual summaries. The goal is to understand which skills and technologies appear most frequently across a broad set of roles.
+Breadbot is a lightweight analysis pipeline that processes job description text, extracts technical keywords using a large language model (LLM), aggregates frequencies, and produces visual summaries. The goal is to understand which skills and technologies appear most frequently across a broad set of roles.
 
 ## Data
 The data folder contains a sample jobs.csv file used to demonstrate the pipeline. This file is not the original dataset used for analysis. The original analysis was performed on a larger private dataset (500+ jobs) collected over a fixed time window. The sample file exists only to make the project runnable and reproducible.

@@ -1,0 +1,11 @@
+Position,Company,Location,Description
+Software Engineer,ExampleTech,Remote,"Design and build backend services using Python and Go. Work with AWS, Docker, and Kubernetes. Develop REST APIs and collaborate with product teams to deliver scalable systems."
+Data Scientist,DataWorks,New York NY,Analyze large datasets using SQL and Python. Build machine learning models with scikit-learn and PyTorch. Communicate insights through dashboards and reports.
+Machine Learning Engineer,ML Labs,San Francisco CA,"Develop and deploy machine learning pipelines. Experience with TensorFlow, model training, and inference. Optimize performance for production environments."
+Backend Engineer,CloudStack,Seattle WA,"Build distributed systems and APIs using Java and Spring Boot. Work with PostgreSQL, Redis, and Kafka. Focus on reliability, scalability, and system performance."
+Full Stack Engineer,WebCore,Austin TX,"Develop web applications using React, TypeScript, and Node.js. Design backend services and integrate RESTful APIs. Collaborate closely with designers and stakeholders."
+Security Engineer,SecureOps,Remote,"Design and implement security controls across cloud infrastructure. Experience with IAM, vulnerability management, and monitoring. Knowledge of AWS security services is preferred."
+Data Engineer,Pipeline Systems,Chicago IL,"Build and maintain data pipelines using Spark and Airflow. Work with ETL processes, data warehouses, and cloud storage. Ensure data quality and reliability."
+AI Engineer,NextGen AI,Boston MA,"Develop AI-powered applications using large language models. Experience with prompt engineering, model evaluation, and API integration. Familiarity with Python and cloud deployment."
+DevOps Engineer,InfraFlow,Remote,"Automate infrastructure using Terraform and CI/CD pipelines. Manage Kubernetes clusters and cloud resources. Focus on monitoring, observability, and system uptime."
+Software Engineer,Core Systems,San Jose CA,"Contribute to core platform services written in C++ and Python. Work on performance optimization, system design, and large-scale backend components."

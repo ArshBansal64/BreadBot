@@ -1,0 +1,7 @@
+config.yaml
+.env
+.env.*
+venv/
+.venv/
+ENV/
+env/

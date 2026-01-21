@@ -1,49 +1,97 @@
-import openai
-import os
+import json
+import re
+from typing import List
 
-TEMPLATE_RESUME_PATH = os.path.join("templates", "resume_template.txt")
-TEMPLATE_CL_PATH = os.path.join("templates", "cover_letter_template.txt")
 
-def generate_documents(job_description, link, api_key):
-    openai.api_key = api_key
+def _normalize_keyword(s: str) -> str:
+    s = s.strip()
+    s = re.sub(r"\s+", " ", s)
+    return s
 
-    with open(TEMPLATE_RESUME_PATH) as f:
-        base_resume = f.read()
-    with open(TEMPLATE_CL_PATH) as f:
-        base_cl = f.read()
 
-    prompt = f"""
-You are an AI assistant helping tailor job applications.
+def extract_keywords(description: str, api_key: str, model: str = "gpt-4o-mini") -> List[str]:
+    description = description or ""
+    if not description.strip():
+        return []
 
-Job Description:
-{job_description}
-
-Base Resume:
-{base_resume}
-
-Base Cover Letter:
-{base_cl}
-
-Return:
-1. Tailored resume
-2. Tailored cover letter
-3. Explanation of changes
-Also extract job title and company name if available.
-"""
-
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
+    system = (
+        "You extract skill keywords from job descriptions.\n"
+        "Return JSON only.\n"
+        "No commentary."
     )
 
-    content = response.choices[0].message.content
+    user = (
+        "From the job description below, extract a list of concise skill keywords.\n"
+        "Rules:\n"
+        "  - Use short phrases (1 to 3 words) when needed.\n"
+        "  - Prefer technical skills, tools, frameworks, platforms, and core concepts.\n"
+        "  - Do not include soft skills, benefits, locations, or generic words.\n"
+        "  - Keep original casing when it is meaningful (AWS, C++, PyTorch).\n"
+        "Output JSON with this shape:\n"
+        "{\n"
+        '  "keywords": ["React", "AWS", "Python"]\n'
+        "}\n\n"
+        "JOB DESCRIPTION:\n"
+        f"{description}"
+    )
 
-    # crude parsing assuming structured GPT response
-    sections = content.split("###")
-    resume = sections[1].strip()
-    cover_letter = sections[2].strip()
-    explanation = sections[3].strip()
-    job_title = sections[4].strip() if len(sections) > 4 else "Unknown_Title"
-    company = sections[5].strip() if len(sections) > 5 else "Unknown_Company"
+    try:
+        from openai import OpenAI  # new SDK
+        client = OpenAI(api_key=api_key)
 
-    return resume, cover_letter, explanation, job_title, company
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=0.0,
+        )
+        text = resp.choices[0].message.content
+
+    except Exception:
+        import openai  # old SDK
+
+        openai.api_key = api_key
+        resp = openai.ChatCompletion.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=0.0,
+        )
+        text = resp["choices"][0]["message"]["content"]
+
+    data = None
+    try:
+        data = json.loads(text)
+    except Exception:
+        m = re.search(r"\{.*\}", text, flags=re.DOTALL)
+        if m:
+            try:
+                data = json.loads(m.group(0))
+            except Exception:
+                data = None
+
+    if not isinstance(data, dict) or "keywords" not in data:
+        return []
+
+    kws = data.get("keywords", [])
+    if not isinstance(kws, list):
+        return []
+
+    cleaned = []
+    seen = set()
+    for kw in kws:
+        if not isinstance(kw, str):
+            continue
+        kw = _normalize_keyword(kw)
+        if not kw:
+            continue
+        if kw.lower() in seen:
+            continue
+        seen.add(kw.lower())
+        cleaned.append(kw)
+
+    return cleaned

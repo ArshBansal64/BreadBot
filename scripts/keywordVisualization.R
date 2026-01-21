@@ -3,17 +3,16 @@ library(readxl)
 library(wordcloud2)
 library(htmlwidgets)
 
-# base directory (project root)
-BASE_DIR <- dirname(getwd())
-
-# paths
+BASE_DIR <- normalizePath(file.path(getwd()))
 KEYWORDS_PATH <- file.path(BASE_DIR, "keywords", "keywords.csv")
 OUTPUT_DIR <- file.path(BASE_DIR, "visualizations")
+dir.create(OUTPUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-dir.create(OUTPUT_DIR, showWarnings = FALSE)
 
 # read keywords csv
-data <- read_csv(KEYWORDS_PATH, col_names = c("keyword", "frequency"))
+data <- readr::read_csv(KEYWORDS_PATH) %>%
+  mutate(frequency = as.numeric(frequency))
+
 
 # ==================
 # Bar chart (top 20)
@@ -42,7 +41,8 @@ ggsave(
   plot = bar_chart,
   width = 8,
   height = 6,
-  dpi = 300
+  dpi = 300,
+  bg = "white"
 )
 
 # ==================
@@ -55,11 +55,15 @@ wc <- wordcloud2(
   backgroundColor = "white"
 )
 
-saveWidget(
-  wc,
-  file = file.path(OUTPUT_DIR, "wordcloud.html"),
-  selfcontained = TRUE
+saveWidget(wc, file.path(OUTPUT_DIR, "wordcloud.html"), selfcontained = FALSE)
+
+webshot2::webshot(
+  "visualizations/wordcloud.html",
+  "visualizations/wordcloud.png",
+  vwidth = 800,
+  vheight = 600
 )
+
 
 # optional static export
 # webshot2::webshot(
